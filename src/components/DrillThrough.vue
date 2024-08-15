@@ -27,7 +27,7 @@ Chart.register(
 );
 
 const chartCanvas = ref<HTMLCanvasElement | null>(null);
-const chartInstance = ref<Chart | null>(null);
+const chartInstance: any = ref<Chart | null>(null);
 
 const initialData = {
   labels: ["Category 1", "Category 2", "Category 3"],
@@ -40,7 +40,7 @@ const initialData = {
   ],
 };
 
-const detailedData = {
+const detailedData: any = {
   "Category 1": {
     labels: ["Detail 1", "Detail 2", "Detail 3"],
     datasets: [
@@ -84,12 +84,12 @@ const createChart = () => {
             const elementIndex = elements[0].index;
             const label = initialData.labels[elementIndex];
             if (label && detailedData[label]) {
-              console.log("HEre");
+              // console.log("HEre");
               // updateChart(detailedData[label]);
-              if (chartInstance.value) {
-                chartInstance.value.data = detailedData[label];
-                chartInstance.value.update();
-              }
+              // if (chartInstance.value) {
+              //   chartInstance.value.data = detailedData[label];
+              //   chartInstance.value.update();
+              // }
             }
           }
         },
@@ -100,7 +100,7 @@ const createChart = () => {
   }
 };
 
-const updateChart = (newData) => {
+const updateChart = (newData: any) => {
   if (chartInstance.value) {
     chartInstance.value.data = newData;
     chartInstance.value.update();

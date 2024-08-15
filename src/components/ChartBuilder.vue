@@ -69,7 +69,7 @@ const chartOptions = {
 const route = useRoute();
 const router = useRouter();
 const campaignStore = useCampaignStore();
-const expressions = reactive([{ metric: "", expression: "", value: "" }]);
+const expressions: any = reactive([{ metric: "", expression: "", value: "" }]);
 
 if (!route?.params?.campaignId) {
   router.push({
@@ -82,7 +82,7 @@ const chartData = computed(() =>
   parseRawData(
     campaignData.value,
     selectedMetrics.value,
-    route.params.campaignId,
+    parseInt(route.params.campaignId as string),
     campaignStore,
     expressions
   )
@@ -93,7 +93,7 @@ const campaignName = computed(() => campaignStore.getCampaignName);
 const campaignData = computed(() => campaignStore.getCampaignData);
 const selectedMetrics = computed(() => campaignStore.getSelectedMetrics);
 const campaignOptions = computed(() =>
-  campaignStore.getCampaigns.map(({ name }) => name)
+  campaignStore.getCampaigns.map(({ name }: { name: string }) => name)
 );
 
 const findCampaign = (key: string, campaignId: any) => {
@@ -133,12 +133,12 @@ watch(
   }
 );
 
-const updateIsModalOpen = (v) => (isModalOpen.value = v);
+const updateIsModalOpen = (v: boolean) => (isModalOpen.value = v);
 
-const chartTypeDropdownChangeHandler = (value) =>
+const chartTypeDropdownChangeHandler = (value: string) =>
   (campaignStore.chartType = value);
 
-const campaignNameDropdownChangeHandler = (value) => {
+const campaignNameDropdownChangeHandler = (value: string) => {
   const matchedCampaign = findCampaign("name", value);
   if (matchedCampaign.id)
     router.push({
@@ -147,11 +147,11 @@ const campaignNameDropdownChangeHandler = (value) => {
     });
 };
 
-const updateExpressions = (index, key, val) => {
+const updateExpressions = (index: number, key: string, val: any) => {
   expressions[index][key] = val;
 };
 
-const removeExpression = (index) => {
+const removeExpression = (index: number) => {
   expressions.splice(index, 1);
 };
 

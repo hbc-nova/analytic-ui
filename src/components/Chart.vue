@@ -58,7 +58,7 @@ const props = defineProps({
   },
 });
 
-const componentsMap = {
+const componentsMap: Record<string, any> = {
   [BAR_CHART]: Bar,
   [LINE_CHART]: Line,
   [DOUGHNUT_CHART]: Doughnut,

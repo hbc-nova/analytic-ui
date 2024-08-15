@@ -35,10 +35,10 @@ export default {
     ChevronDownIcon,
   },
   methods: {
-    getMenuItemClasses(active) {
+    getMenuItemClasses(active: boolean) {
       return `min-w-[5rem] ${active ? "bg-light-white" : ""}`;
     },
-    optionClickHandler(option) {
+    optionClickHandler(option: string) {
       this.$emit("click", option);
     },
   },
