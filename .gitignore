@@ -25,3 +25,8 @@ dist-ssr
 
 # Ignore .env files
 .env
+
+tsconfig.node.tsbuildinfo
+tsconfig.tsbuildinfo
+
+vite.config.d.ts

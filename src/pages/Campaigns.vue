@@ -28,7 +28,7 @@ onMounted(() => {
   campaignStore.fetchAllCampaigns();
 });
 
-const pushToReports = (index) => {
+const pushToReports = (index: number) => {
   router.push({ name: "report-builder", params: { campaignId: index + 1 } });
 };
 </script>

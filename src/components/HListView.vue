@@ -21,7 +21,7 @@ const props = defineProps({
 const campaignStore = useCampaignStore();
 const { selectedMetrics } = campaignStore;
 
-const deleteHandler = (index) => selectedMetrics.splice(index, 1);
+const deleteHandler = (index: number) => selectedMetrics.splice(index, 1);
 </script>
 
 <style scoped>

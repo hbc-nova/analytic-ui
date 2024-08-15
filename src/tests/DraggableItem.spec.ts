@@ -56,8 +56,10 @@ describe("DraggableItemComponent.vue", () => {
     // Touch start
     const touchStartEvent = new TouchEvent("touchstart", {
       touches: [
+        // @ts-ignore
         new MockTouch({
           identifier: 1,
+          // @ts-ignore
           target: grabbableElement!,
           clientX: 100,
           clientY: 100,
@@ -75,8 +77,10 @@ describe("DraggableItemComponent.vue", () => {
     // Touch move
     const touchMoveEvent = new TouchEvent("touchmove", {
       touches: [
+        // @ts-ignore
         new MockTouch({
           identifier: 1,
+          // @ts-ignore
           target: grabbableElement!,
           clientX: 150,
           clientY: 150,
