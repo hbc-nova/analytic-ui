@@ -1,3 +1,4 @@
+import moment from "moment";
 import { DATE_BETWEEN, EQUALS, GREATER_THAN, LESSER_THAN } from "../constants";
 
 export function toKebabCase(str: string) {
@@ -20,6 +21,33 @@ export function processAndFormatMetrics(data: any) {
   return input.filter((key) => !fieldsToExclude.includes(key));
 }
 
+export function validateDateExpression(
+  metric: any,
+  expression: any,
+  data: any
+) {
+  const { startDate, endDate } = expression;
+  const parsedStartDate = startDate ? moment(startDate) : moment.invalid();
+  const parsedEndDate = endDate ? moment(endDate) : moment.invalid();
+  const parsedMetricDate = data[metric]
+    ? moment(data[metric])
+    : moment.invalid();
+  let isEligible = true;
+  if (
+    !parsedMetricDate.isValid() ||
+    !(parsedStartDate.isValid() || parsedEndDate.isValid())
+  )
+    return isEligible;
+
+  if (parsedStartDate.isValid())
+    isEligible = parsedMetricDate.isSameOrAfter(parsedStartDate);
+
+  if (isEligible && parsedEndDate.isValid())
+    isEligible = parsedMetricDate.isSameOrBefore(parsedEndDate) && isEligible;
+
+  return isEligible;
+}
+
 export function parseRawData(
   data: any,
   metrics: any,
@@ -32,20 +60,24 @@ export function parseRawData(
   campaignStore.isChartLoading = true;
 
   let campaignData = data.filter(
-    (e: any) => parseInt(e.id) % (campaignId + 1) === 0
+    (e: any) => parseInt(e.id) % (campaignId + 2) === 0
   );
 
   expressions.forEach((expression: any) => {
+    const { expression: ex, metric, value } = expression;
+
+    if (!ex || !metric) return;
+
     campaignData = campaignData.filter((d: any) => {
-      switch (expression.expression) {
+      switch (ex) {
         case EQUALS:
-          return d[expression.metric] === parseInt(expression.value);
+          return d[metric] === parseInt(value);
         case LESSER_THAN:
-          return d[expression.metric] < parseInt(expression.value);
+          return d[metric] < parseInt(value);
         case GREATER_THAN:
-          return d[expression.metric] > parseInt(expression.value);
+          return d[metric] > parseInt(value);
         case DATE_BETWEEN:
-          return true;
+          return validateDateExpression(metric, expression, d);
         default:
           return true;
       }
