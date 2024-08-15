@@ -39,11 +39,15 @@
         template(v-slot)
           div(class="mt-2 min-h-[15rem] min-w-[20rem]")
             .grid.grid-cols-1.my-3(v-for="[index, ex] of expressions.entries()", :key="index", class="md:grid-cols-4")
-              dropdown(labelText="Metric", :buttonText="ex.metric", :menuOptions="campaignStore.metrics", @click="(val) => updateExpressions(index, 'metric', val)")
+              dropdown(labelText="Metric", :buttonText="ex.metric", :menuOptions="[...campaignStore.metrics, 'created_date']", @click="(val) => updateExpressions(index, 'metric', val)")
               dropdown(labelText="Expression", :buttonText="ex.expression", :menuOptions="EXPRESSION_TYPES", @click="(val) => updateExpressions(index, 'expression', val)")
               div
-                .text-xs.mb-1 Value
-                input.expression-input(type="text", v-model="ex.value")
+                .text-xs.mb-1(v-if="ex['expression'] === DATE_BETWEEN") Start or End Date
+                .text-xs.mb-1(v-else) Value
+                div.grid(v-if="ex['expression'] === DATE_BETWEEN")
+                  input.expression-input(type="date", v-model="ex.startDate")
+                  input.expression-input(type="date", v-model="ex.endDate")
+                input.expression-input(v-else, type="text", v-model="ex.value")
               XMarkIcon.w-4.h-4.cursor-pointer.expression-cross-icon.mb-1(@click="() => removeExpression(index)")
             button.mt-3(@click="addExpression", type="button", class="text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-1 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 shadow-lg shadow-lime-500/50 dark:shadow-lg dark:shadow-lime-800/80 font-medium rounded-lg text-sm px-3 py-1 text-center me-2 mb-2")
               | Add Expression
@@ -58,7 +62,7 @@ import {
   XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { useCampaignStore } from "../store";
-import { CHART_TYPES, EXPRESSION_TYPES } from "../constants";
+import { CHART_TYPES, EXPRESSION_TYPES, DATE_BETWEEN } from "../constants";
 import { parseRawData } from "../utils";
 
 const chartOptions = {
@@ -148,7 +152,7 @@ const campaignNameDropdownChangeHandler = (value: string) => {
 };
 
 const updateExpressions = (index: number, key: string, val: any) => {
-  expressions[index][key] = val;
+  if (typeof val === "string") expressions[index][key] = val;
 };
 
 const removeExpression = (index: number) => {

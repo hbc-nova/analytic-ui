@@ -2,7 +2,7 @@
 .text-4xl
   | Hi Im in WIP mode 👷🚧⚒️⚒️🚧👷
   .m-5
-    drill-through
+    .text-xl Please redirect to other pages
 </template>
 
 <script setup lang="ts"></script>
